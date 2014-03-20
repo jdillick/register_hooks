@@ -1,0 +1,28 @@
+<?php
+
+function register_hooks_register( $module, $hook, $callback ) {
+  if ( is_callable($callback) ) {
+    register_hooks_hook_callback($module, $hook, $callback);
+    eval("function {$module}_{$hook}() {
+      return call_user_func_array(register_hooks_hook_callback($module, $hook), func_get_args());
+    }");
+  }
+}
+
+function register_hooks_hook_callback( $module, $hook, $callback = FALSE ) {
+  $callbacks = &drupal_static(__FUNCTION__);
+  if ( ! is_array($callbacks) ) $callbacks = array();
+
+  if ( is_callable($callback) ) {
+    $callbacks[$module][$hook] = $callback;
+    return $callback;
+  }
+
+  if ( isset($callbacks[$module][$hook]) ) {
+    return $callbacks[$module][$hook];
+  }
+
+  return 'register_hooks_do_noop';
+}
+
+function register_hooks_do_noop() {}
