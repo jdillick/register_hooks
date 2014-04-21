@@ -4,6 +4,9 @@ Hook callback registration module for Drupal 7. Allows developer to use any PHP 
 Example Drupal Hook registration using real callbacks (not just functions).
 
 ```php
+/**
+ * Register a static method Test::init() to implement hook_init() for module my_module_name.
+ */
 register_hooks_register('my_module_name', 'init', array('Test','init'));
 class Test {
   /**
@@ -15,6 +18,10 @@ class Test {
   }
 }
 
+/**
+ * Register the instantiated object's method Test2::form_alter() to implement form_alter()
+ * for module my_module_name.
+ */
 register_hooks_register('my_module_name', 'form_alter', array(new Test2(), 'form_alter'));
 class Test2 {
   /**
@@ -36,7 +43,6 @@ class Test2 {
 
 If your module were using xautoload, by donquixote, this class would be autoloaded from
 my_module_name/lib/Drupal/my_module_name/MyClass.php whenever hook_views_data() was invoked, and
-
 the static method my_method() would be called.
 
 ```php
