@@ -1,4 +1,9 @@
 # Register Hooks
+register_hooks  Copyright (C) 2014  John A Dillick
+  This program comes with ABSOLUTELY NO WARRANTY;
+  This is free software, and you are welcome to redistribute it
+  under the GNU General Public License version 3 or later.
+
 Hook callback registration module for Drupal 7. Allows developer to use any PHP callable to implement Drupal hooks, instead of modulename_hookname() functions.
 
 Example Drupal Hook registration using real callbacks (not just functions).
