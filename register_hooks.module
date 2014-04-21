@@ -3,9 +3,11 @@
 function register_hooks_register( $module, $hook, $callback ) {
   if ( is_callable($callback) ) {
     register_hooks_hook_callback($module, $hook, $callback);
-    eval("function {$module}_{$hook}() {
-      return call_user_func_array(register_hooks_hook_callback($module, $hook), func_get_args());
-    }");
+    if ( ! function_exists("{$module}_{$hook}") ) {
+      eval("function {$module}_{$hook}() {
+        return call_user_func_array(register_hooks_hook_callback($module, $hook), func_get_args());
+      }");
+    }
   }
 }
 
