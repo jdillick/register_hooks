@@ -1,3 +1,5 @@
 name = Register Hooks
 description = Dynamic Registration of Hook Callbacks
 core = 7.x
+
+dependencies[] = xautoload
