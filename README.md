@@ -17,14 +17,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------------------
 
-Example Drupal Hook registration using real callbacks (not just functions).
+Example Drupal Hook registration using real callables (not just crumby functions).
 
 ```php
-/**
- * Register a static method Test::init() to implement hook_init() for module my_module_name.
- */
-register_hooks_register('my_module_name', 'init', array('Test','init'));
-class Test {
+use Drupal\register_hooks\RegisterHooks;
+
+RegisterHooks::hook('my_module_name', 'init', array('StaticCall','init'));
+class StaticCall {
   /**
    * Implements hook_init().
    * Believe it or not.
@@ -34,12 +33,8 @@ class Test {
   }
 }
 
-/**
- * Register the instantiated object's method Test2::form_alter() to implement form_alter()
- * for module my_module_name.
- */
-register_hooks_register('my_module_name', 'form_alter', array(new Test2(), 'form_alter'));
-class Test2 {
+RegisterHooks::hook('my_module_name', 'form_alter', array(new InstantiatedCall(), 'form_alter'));
+class InstantiatedCall {
   /**
    * Implements hook_form_alter().
    * No joke.
@@ -55,15 +50,43 @@ class Test2 {
     );
   }
 }
-```
 
-If your module were using xautoload, by donquixote, this class would be autoloaded from
-my_module_name/lib/Drupal/my_module_name/MyClass.php whenever hook_views_data() was invoked, and
-the static method my_method() would be called.
-
-```php
-register_hooks_register('my_module_name', 'views_data', array(
-    'Drupal\my_module_name\MyClass', 'my_method'
+/**
+ * Autoloaded example.
+ *
+ * Your ViewsController loaded PSR-0 or PSR-4 style!
+ */
+RegisterHooks::hook('my_views_module', 'views_data', array(
+    'Drupal\my_views_module\ViewsController', 'data'
   )
 );
+
+/**
+ * Example page callable in a menu hook.
+ */
+RegisterHooks::hook('my_module_name', 'menu', array('Router', 'menu'));
+class Router {
+  /**
+   * Implements hook_menu().
+   */
+  public static function menu() {
+    $items['myroute'] = array(
+      'title' => 'I am a menu route.',
+      'page callback' => RegisterHooks::lambda(array(__CLASS__,'my_page_callable')),
+      'page arguments' => array(),
+      'access arguments' => array(''),
+      'type' => ,
+      'file' => ,
+    );
+
+    return $items;
+  }
+
+  /**
+   * My page callable for /myroute
+   */
+  public static my_page_callable() {
+    return array(); // render array
+  }
+}
 ```
