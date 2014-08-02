@@ -52,7 +52,7 @@ return call_user_func_array(
    * @return callable the registered callable
    */
   public static function register( $module, $hook, $callback = FALSE ) {
-    $callbacks = &drupal_static(__FUNCTION__);
+    $callbacks = &drupal_static(__METHOD__);
     if ( ! is_array($callbacks) ) $callbacks = array();
 
     if ( is_callable($callback) ) {
