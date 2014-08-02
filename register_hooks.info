@@ -1,5 +1,6 @@
 name = Register Hooks
 description = Dynamic Registration of Hook Callbacks
 core = 7.x
+php = 5.3
 
 dependencies[] = xautoload

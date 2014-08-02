@@ -6,6 +6,8 @@
  * Bet you thought more was gonna be in here.
  */
 
+xautoload()->registerModulePsr4(__FILE__, 'src');
+
 /**
  * This function is does nothing on purpose.
  * @return not a thing
