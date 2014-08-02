@@ -17,12 +17,8 @@ class RegisterHooks {
       $label = 'label_' . sha1(time());
       self::register('register_hooks', $label, $callback);
       return create_function('$args=array()',
-        t("return call_user_func_array(
-            \\Drupal\\register_hooks\\RegisterHooks::register('register_hooks', @label), func_get_args());",
-          array(
-            '@label' => $label,
-          )
-        )
+        "return call_user_func_array(
+            \\Drupal\\register_hooks\\RegisterHooks::register('register_hooks', $label), func_get_args());"
       );
     }
     return 'noop';
@@ -35,15 +31,16 @@ class RegisterHooks {
    * @param  callable $callback the callable
    */
   public static function hook( $module, $hook, $callback ) {
-    if ( is_callable($callback) ) {
+
+    if ( is_callable($callback) && module_exists($module) ) {
       self::register($module, $hook, $callback);
-      eval(t("function \\{@module}_{@hook}() {
-            return call_user_func_array(
-              \\Drupal\\register_hooks\\RegisterHooks::register(@module, @hook), func_get_args());
-          }", array(
-              '@module' => $module,
-              '@hook' => $hook,
-          )));
+      eval(
+"function {$module}_{$hook}() {
+return call_user_func_array(
+  \\Drupal\\register_hooks\\RegisterHooks::register($module, $hook), func_get_args()
+  );
+}"
+      );
     }
   }
 
