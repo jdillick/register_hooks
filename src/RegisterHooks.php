@@ -46,7 +46,11 @@ class RegisterHooks {
    * @return callable the registered callable
    */
   public static function register( $module, $hook, $callback = FALSE ) {
-    $callbacks = &drupal_static(__METHOD__);
+    static $fast_static_callbacks;
+    if ( ! isset($fast_static_callbacks) ) {
+      $fast_static_callbacks['callbacks'] = &drupal_static(__METHOD__);
+    }
+    $callbacks = &$fast_static_callbacks['callbacks'];
     if ( ! is_array($callbacks) ) $callbacks = array();
 
     if ( is_callable($callback) ) {
