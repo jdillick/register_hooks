@@ -5,7 +5,6 @@
  */
 
 namespace Drupal\register_hooks_example;
-use \Drupal\register_hooks\RegisterHooks;
 
 class Route {
 
