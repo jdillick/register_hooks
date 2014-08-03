@@ -1,0 +1,6 @@
+name = Register Hooks Example
+description = Your Face!
+core = 7.x
+php = 5.3
+
+dependencies[] = register_hooks

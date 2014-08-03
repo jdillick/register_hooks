@@ -47,7 +47,12 @@ RegisterHooks::hook('my_views_module', 'views_data', array(
 /**
  * Example page callable in a menu hook.
  */
-RegisterHooks::hook('my_module_name', 'menu', array('Router', 'menu'));
+RegisterHooks::hooks('my_module_name', array(
+    'menu' => array('Router', 'menu'),
+    'menu_myroute_pc' => array('Router', 'page')
+  )
+);
+
 class Router {
   /**
    * Implements hook_menu().
@@ -55,11 +60,9 @@ class Router {
   public static function menu() {
     $items['myroute'] = array(
       'title' => 'I am a menu route.',
-      'page callback' => RegisterHooks::lambda(array(__CLASS__,'my_page_callable')),
-      'page arguments' => array(),
-      'access arguments' => array(''),
-      'type' => ,
-      'file' => ,
+      'page callback' => 'my_module_name_menu_myroute_pc',
+      'access callback' => TRUE,
+      'type' => MENU_NORMAL_ITEM,
     );
 
     return $items;
@@ -68,7 +71,7 @@ class Router {
   /**
    * My page callable for /myroute
    */
-  public static my_page_callable() {
+  public static page() {
     return array(); // render array
   }
 }

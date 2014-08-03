@@ -1,0 +1,16 @@
+<?php
+/**
+ * @file
+ * register_hooks_example.module
+ */
+
+namespace Drupal\register_hooks_example;
+use Drupal\register_hooks\RegisterHooks;
+
+xautoload()->registerModulePsr4(__FILE__, 'src');
+
+RegisterHooks::hooks('register_hooks_example', array(
+  'menu' => array(__NAMESPACE__ . '\\Route','menu'),
+  'menu_yoface_page' => array(__NAMESPACE__ . '\\Route','page'),
+));
+

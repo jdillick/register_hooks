@@ -8,20 +8,14 @@ namespace Drupal\register_hooks;
 
 class RegisterHooks {
   /**
-   * Get a lambda for any php callable
-   * @param  callable $callback the callable
-   * @return string the lambda function for your callable
+   * Create multiple drupal hooks on php callables.
+   * @param  string $module   the module name
+   * @param  array $callbacks array('hook' => <callable>)
    */
-  public static function lambda($callback){
-    if ( is_callable($callback) ) {
-      $label = 'label_' . sha1(time());
-      self::register('register_hooks', $label, $callback);
-      return create_function('$args=array()',
-        "return call_user_func_array(
-            \\Drupal\\register_hooks\\RegisterHooks::register('register_hooks', $label), func_get_args());"
-      );
+  public static function hooks($module, $callbacks) {
+    foreach ( $callbacks as $hook => $callback ) {
+      self::hook($module, $hook, $callback );
     }
-    return 'noop';
   }
 
   /**
@@ -31,15 +25,15 @@ class RegisterHooks {
    * @param  callable $callback the callable
    */
   public static function hook( $module, $hook, $callback ) {
-
+    $hook = check_plain($hook);
     if ( is_callable($callback) && module_exists($module) ) {
       self::register($module, $hook, $callback);
       eval(
-"function {$module}_{$hook}() {
-return call_user_func_array(
-  \\Drupal\\register_hooks\\RegisterHooks::register($module, $hook), func_get_args()
-  );
-}"
+        "function {$module}_{$hook}() {
+        return call_user_func_array(
+          \\Drupal\\register_hooks\\RegisterHooks::register('$module', '$hook'), func_get_args()
+          );
+        }"
       );
     }
   }
@@ -66,5 +60,4 @@ return call_user_func_array(
 
     return 'noop';
   }
-
 }
