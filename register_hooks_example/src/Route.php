@@ -14,18 +14,15 @@ class Route {
   public static function menu() {
     $items['yoface'] = array(
       'title' => t('Yo Face'),
-      'page callback' => 'register_hooks_example_menu_yoface_page',
+      'page callback' => 'Drupal\register_hooks_example\yoface_page',
       'access callback' => TRUE,
       'type' => MENU_NORMAL_ITEM,
     );
 
     return $items;
   }
+}
 
-  /**
-   * Page callback
-   */
-  public static function page() {
-    echo "Yo face!";
-  }
+function yoface_page() {
+    echo "Yo face namespaced procedural!";
 }
